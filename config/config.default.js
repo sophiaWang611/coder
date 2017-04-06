@@ -5,12 +5,6 @@ const path = require('path');
 module.exports = appInfo => {
   const config = {
     sequelize: {
-      dialect: 'mysql',
-      database: 'coder',
-      host: 'doubit.com',
-      port: '3306',
-      username: 'root',
-      password: '12121212Wxy!@'
     },
     view: {
       defaultViewEngine: 'nunjucks',
