@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <div>
+        {% for item in data.questions %}
+            <div>{{item.title}}}</div>
+            <div>{{item.question}}}</div>
+            <ul>
+                {% for opt in item.options %}
+                    <li data-id="{{opt.id}}">{{opt.name}}}</li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </div>
+{% endblock %}
