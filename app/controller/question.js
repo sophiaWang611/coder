@@ -2,10 +2,13 @@
 
 module.exports = app => {
     class QuestionController extends app.Controller {
+        * index(ctx) {
+            yield ctx.render("question-list.html");
+        }
+
         * list(ctx) {
-            const type = ctx.params.type || "";
-            const list = yield ctx.service.question.findList(type);
-            yield ctx.render("question-list.html", {data: list});
+            const type = ctx.query.type || "";
+            ctx.body = yield ctx.service.question.findList(type);
         }
 
         * getScore(ctx) {

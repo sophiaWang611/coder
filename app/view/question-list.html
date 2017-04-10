@@ -1,15 +1,83 @@
 {% extends "layout.html" %}
 
-{% block body %}
-    <div>
-        {% for item in data.questions %}
-            <div>{{item.title}}}</div>
-            <div>{{item.question}}}</div>
-            <ul>
-                {% for opt in item.options %}
-                    <li data-id="{{opt.id}}">{{opt.name}}}</li>
-                {% endfor %}
-            </ul>
-        {% endfor %}
-    </div>
-{% endblock %}
+    {% block header%}
+        <style>
+            #container {
+                padding: 20px;
+                border: 1px solid #ccc;
+                margin: 20px;
+            }
+            .pl-20 {
+                padding-left: 20px;
+            }
+            .title {
+                font-size: 14px;
+                font-weight: 600;
+            }
+            .question-item {
+                margin-bottom: 10px;
+                border-bottom: 1px dashed rgba(179, 178, 178, 0.52);
+                padding-bottom: 15px;
+            }
+            .question {
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+            .options {
+                font-size: 14px;
+            }
+            .option {
+                padding-left: 10px;
+                padding-right: 10px;
+                height: 30px;
+                line-height: 28px;
+                border: 1px solid #cccccc;
+                border-radius: 3px;
+                margin-right: 20px;
+                cursor: pointer;
+            }
+            .option.active {
+                background: #247AC3;
+                color: #F5F5F5;
+            }
+        </style>
+    {% endblock %}
+
+    {% block body %}
+        <div class="form-group" id="container">
+            <div class="question-item" v-for="(item, index) in questions">
+                <div class="title">
+                    <span>${index + 1}. </span>
+                    <span>${item.title}</span>
+                </div>
+                <div class="question pl-20">${item.question}</div>
+                <div class="row options pl-20">
+                    <div v-for="opt in item.options" class="option" data-id="{{opt.id}}" @click="choseOpt" unselectable="on" style="-moz-user-select:none;" onselectstart="return false;">${opt.name}</div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+
+    {% block script %}
+        <script type="application/javascript">
+            var app = new Vue({
+                el: "#container",
+                delimiters: ['${', '}'],
+                data: {
+                    questions: [],
+                    type: "js"
+                },
+                methods: {
+                    init: function() {
+                        $.get("/questions/list/", {type: this.type}, function(data) {
+                            app.questions = data.questions;
+                        });
+                    },
+                    choseOpt: function(event) {
+                        $(event.target).toggleClass("active");
+                    }
+                }
+            });
+            app.init();
+        </script>
+    {% endblock %}

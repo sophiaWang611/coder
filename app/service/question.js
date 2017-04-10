@@ -13,13 +13,13 @@ module.exports = app => {
                 return ctx.model.Option.findAll({where: {question_id: {$in: questionIds}}});
             }).then((rows)=>{
                 _.each(returnVal.questions, (v, k)=>{
-                    var options = v.options || [], opt = _.where(rows, {question_id: v.id});
+                    var options = v.dataValues.options || [], opt = _.where(rows, {question_id: v.id});
                     if (opt && _.isArray(opt)) {
                         options = options.concat(opt);
                     } else if (opt) {
                         options.push(opt);
                     }
-                    v.options = options;
+                    v.dataValues.options = options;
                 });
                 return returnVal;
             });
