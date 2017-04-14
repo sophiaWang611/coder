@@ -49,6 +49,7 @@ module.exports = app => {
         * getScore(ctx, postData) {
             var questionIds = _.pluck(postData.answers, 'questionId');
             var quesOptMap = {}, resultMap = [];
+            //TODO: 记录当前用户提交的内容
 
             return ctx.model.Option.findAll({where: {question_id: {$in: questionIds}, is_answer: 1}})
                 .map((row)=>{

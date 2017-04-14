@@ -52,6 +52,11 @@
             .glyphicon-remove {
                 color: #F00;
             }
+            .btn {
+                width: 40%;
+                margin: 0 auto;
+                display: block;
+            }
         </style>
     {% endblock %}
 
@@ -70,9 +75,8 @@
                     <div v-for="opt in item.options" class="option" @click="choseOpt(opt.id, item.id)" unselectable="on" style="-moz-user-select:none;" onselectstart="return false;">${opt.name}</div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-4"></div>
-                <input id="submitBtn" type="button" class="btn btn-primary col-md-4" disabled="disabled" value="提交" @click="submit"/>
+            <div class="row" v-if="showBtn">
+                <input id="submitBtn" type="button" class="btn btn-primary" v-bind:disabled="!enableBtn" value="提交" @click="submit"/>
             </div>
         </div>
     {% endblock %}
@@ -85,7 +89,9 @@
                 data: {
                     questions: [],
                     answers: [],
-                    type: "js"
+                    type: "js",
+                    enableBtn: false,
+                    showBtn: true
                 },
                 methods: {
                     init: function() {
@@ -112,11 +118,7 @@
                         }
                         this.answers[index] = answers;
 
-                        if (this.validateAnswers()) {
-                            $("#submitBtn").removeAttr("disabled");
-                        } else {
-                            $("#submitBtn").attr('disabled', "disabled");
-                        }
+                        this.enableBtn = this.validateAnswers();
                     },
                     submit: function() {
                         if (!this.validateAnswers()) {
@@ -128,6 +130,7 @@
                             _.each(resp, function(answer) {
                                 var question = _.findWhere(app.questions, {id: answer.questionId});
                                 Vue.set(question, "isRight", answer.isRight);
+                                app.showBtn = false;
                             });
                         });
                     },
