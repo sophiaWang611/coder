@@ -1,4 +1,5 @@
 'use strict';
+var _ = require("underscore");
 
 module.exports = app => {
     class QuestionController extends app.Controller {
@@ -12,19 +13,18 @@ module.exports = app => {
         }
 
         * getScore(ctx) {
-            const createRule = {
-                type: { type: 'string', required: true },
-                answers: {
-                    type: 'array',
-                    itemType: 'object',
-                    required: true,
-                    rule: {
-                        questionId: 'int',
-                        optionId: 'int'
-                    }
-                }
-            };
-            ctx.validate(createRule, ctx.body)
+            var postData = {};
+            try {postData = JSON.parse(ctx.request.body.data);} catch (e) {console.log("parse data fail: ", ctx.request.body)}
+            if (_.isEmpty(postData)) {
+                return ctx.body = {errCode: -1, errMsg: "提交数据不能为空"};
+            }
+
+            const errMsg = ctx.service.question.validateAnswer(ctx, postData);
+            if (!_.isEmpty(errMsg)) {
+                return ctx.body = {errCode: -1, errMsg: errMsg};
+            }
+
+            ctx.body = yield ctx.service.question.getScore(ctx, postData);
         }
     }
     return QuestionController;

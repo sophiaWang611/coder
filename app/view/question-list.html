@@ -25,6 +25,7 @@
             }
             .options {
                 font-size: 14px;
+                display: table;
             }
             .option {
                 padding-left: 10px;
@@ -35,10 +36,21 @@
                 border-radius: 3px;
                 margin-right: 20px;
                 cursor: pointer;
+                float: left;
             }
             .option.active {
                 background: #247AC3;
                 color: #F5F5F5;
+            }
+            .glyphicon-block {
+                width: 14px;
+                height: 14px;
+            }
+            .glyphicon-ok {
+                color: forestgreen;
+            }
+            .glyphicon-remove {
+                color: #F00;
             }
         </style>
     {% endblock %}
@@ -47,13 +59,20 @@
         <div class="form-group" id="container">
             <div class="question-item" v-for="(item, index) in questions">
                 <div class="title">
+                    <span v-if="typeof item.isRight == 'undefined'" class="glyphicon glyphicon-block"></span>
+                    <span v-if="item.isRight" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                    <span v-if="typeof item.isRight != 'undefined' && !item.isRight" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     <span>${index + 1}. </span>
                     <span>${item.title}</span>
                 </div>
                 <div class="question pl-20">${item.question}</div>
-                <div class="row options pl-20">
-                    <div v-for="opt in item.options" class="option" data-id="{{opt.id}}" @click="choseOpt" unselectable="on" style="-moz-user-select:none;" onselectstart="return false;">${opt.name}</div>
+                <div class="options pl-20">
+                    <div v-for="opt in item.options" class="option" @click="choseOpt(opt.id, item.id)" unselectable="on" style="-moz-user-select:none;" onselectstart="return false;">${opt.name}</div>
                 </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4"></div>
+                <input id="submitBtn" type="button" class="btn btn-primary col-md-4" disabled="disabled" value="提交" @click="submit"/>
             </div>
         </div>
     {% endblock %}
@@ -65,16 +84,61 @@
                 delimiters: ['${', '}'],
                 data: {
                     questions: [],
+                    answers: [],
                     type: "js"
                 },
                 methods: {
                     init: function() {
                         $.get("/questions/list/", {type: this.type}, function(data) {
                             app.questions = data.questions;
+                            _.each(data.questions, function(ques) {
+                                app.answers.push({questionId: ques.id, optionIds: []});
+                            });
                         });
                     },
-                    choseOpt: function(event) {
+                    choseOpt: function(optId, quesId) {
                         $(event.target).toggleClass("active");
+                        var index = _.findIndex(this.answers, {questionId: quesId});
+                        if (index < 0) {
+                            this.answers.push({questionId: quesId, optionIds: []});
+                            index = _.findIndex(this.answers, {questionId: quesId});
+                        }
+
+                        var answers = this.answers[index];
+                        if ($(event.target).hasClass("active")) {
+                            answers.optionIds.push(optId);
+                        } else {
+                            answers.optionIds = _.without(answers.optionIds, optId);
+                        }
+                        this.answers[index] = answers;
+
+                        if (this.validateAnswers()) {
+                            $("#submitBtn").removeAttr("disabled");
+                        } else {
+                            $("#submitBtn").attr('disabled', "disabled");
+                        }
+                    },
+                    submit: function() {
+                        if (!this.validateAnswers()) {
+                            return;
+                        }
+                        var postData = {type: this.type, answers: this.answers};
+                        $.post("/questions/getScore", {data: JSON.stringify(postData)}, function(resp) {
+                            console.log(resp);
+                            _.each(resp, function(answer) {
+                                var question = _.findWhere(app.questions, {id: answer.questionId});
+                                Vue.set(question, "isRight", answer.isRight);
+                            });
+                        });
+                    },
+                    validateAnswers: function() {
+                        var allAnswer = true;
+                        _.each(this.answers, function(arr) {
+                            if (!arr || !_.isArray(arr.optionIds) || _.isEmpty(arr.optionIds)) {
+                                allAnswer = false;
+                            }
+                        });
+                        return allAnswer;
                     }
                 }
             });
