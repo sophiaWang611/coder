@@ -4,12 +4,12 @@ var _ = require("underscore");
 module.exports = app => {
     class QuestionController extends app.Controller {
         * index(ctx) {
-            yield ctx.render("question-list.html");
+            yield ctx.render("index.html");
         }
 
         * list(ctx) {
-            const type = ctx.query.type || "";
-            ctx.body = yield ctx.service.question.findList(type);
+            const language = ctx.query.language || "";
+            ctx.body = yield ctx.service.question.findList(language);
         }
 
         * getScore(ctx) {

@@ -5,9 +5,9 @@ var _ = require("underscore");
 
 module.exports = app => {
     class Question extends app.Service {
-        * findList(type) {
-            var ctx = this.ctx, returnVal = {type: type};
-            return ctx.model.Question.findAll({where: {type: type}}).then((rows)=>{
+        * findList(language) {
+            var ctx = this.ctx, returnVal = {language: language};
+            return ctx.model.Question.findAll({where: {language: language}}).then((rows)=>{
                 returnVal.questions = rows;
                 var questionIds = _.pluck(rows, "id");
                 return ctx.model.Option.findAll({where: {question_id: {$in: questionIds}}});
@@ -30,7 +30,7 @@ module.exports = app => {
 
         * validateAnswer(ctx, postData) {
             const createRule = {
-                type: {type: 'string', required: true},//问题的类型
+                language: {language: 'string', required: true},//问题的类型
                 answers: {
                     type: 'array',
                     itemType: 'object',

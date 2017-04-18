@@ -1,16 +1,31 @@
-<!DOCTYPE html>
-<html>
-    <head lang="en">
-        <meta charset="UTF-8">
-        <title></title>
-        {% block header %}
-        {% endblock %}
-    </head>
-    <body>
-        <span>hi {{name}}</span>
-        {% block body %}
-        {% endblock %}
-    </body>
-    {% block end %}
+{% extends "layout.html" %}
+
+    {% block header%}
+        <link href="/public/css/index.css" rel="stylesheet">
     {% endblock %}
-</html>
+
+    {% block body %}
+        <div class="form-group" id="container-questionList">
+            <div class="question-item" v-for="(item, index) in questions">
+                <div class="title">
+                    <span v-if="typeof item.isRight == 'undefined'" class="glyphicon glyphicon-block"></span>
+                    <span v-if="item.isRight" class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                    <span v-if="typeof item.isRight != 'undefined' && !item.isRight" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    <span>${index + 1}. </span>
+                    <span>${item.title}</span>
+                </div>
+                <div class="question pl-20">${item.question}</div>
+                <div class="options pl-20" v-if="item.type == 1">
+                    <div v-for="opt in item.options" class="option" @click="choseOpt(opt.id, item.id)" unselectable="on" style="-moz-user-select:none;" onselectstart="return false;">${opt.name}</div>
+                </div>
+            </div>
+            <div class="row" v-if="showBtn">
+                <input id="submitBtn" type="button" class="btn btn-primary" v-bind:disabled="!enableBtn" value="提交" @click="submit"/>
+            </div>
+        </div>
+
+    {% endblock %}
+
+    {% block script %}
+        <script src="/public/js/question-list.js"></script>
+    {% endblock %}

@@ -10,8 +10,9 @@ module.exports = app => {
         title: STRING(250),
         question: STRING(250),
         tip: STRING(250),
+        language: STRING(20),
         score: INTEGER(10),
-        type: STRING(20)
+        type: INTEGER(20) //1-选择题；2-填空题
     }, {
         createdAt: 'created_at',
         updatedAt: 'updated_at'
