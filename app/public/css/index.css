@@ -39,6 +39,10 @@
   margin-bottom: 15px;
   margin-right: 15px;
 }
+.modal-err-msg {
+  float: left;
+  color: #e81414;
+}
 #container-questionList {
   padding: 20px;
   border: 1px solid #ccc;

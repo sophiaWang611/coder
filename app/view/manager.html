@@ -27,7 +27,7 @@
                             </div>
                         </div>
                         <div class="system-add-btn">
-                            <div class="btn btn-success" data-toggle="modal" data-target="#addQuestion">新增</div>
+                            <div class="btn btn-success" @click="add">新增</div>
                         </div>
                     </div>
                 </div>
@@ -52,7 +52,7 @@
                         <td>${item.language}</td>
                         <td>
                             <div><a href="javascritp:;" @click="edit(item)">编辑</a></div>
-                            <div><a href="javascritp:;">删除</a></div>
+                            <div><a href="javascritp:;" @click="del(item)">删除</a></div>
                         </td>
                     </tr>
                 </tbody>
@@ -134,7 +134,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <span>${errMsg}</span>
+                        <span class="modal-err-msg">${errMsg}</span>
                         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                         <button type="button" class="btn btn-primary" @click='save'>确定</button>
                     </div>
@@ -144,86 +144,5 @@
     {% endblock %}
 
     {% block script %}
-        <script type="application/javascript">
-            var app = new Vue({
-                el: "#container-addQuestions",
-                delimiters: ['${', '}'],
-                data: {
-                    language: "js",
-                    itemList: []
-                },
-                methods: {
-                    init: function() {
-                        this.search();
-                    },
-                    search: function() {
-                        $.get("/manager/list", {language: this.language}, function(data) {
-                            app.itemList = data.questions;
-                        });
-                    },
-                    edit: function(item) {
-                        editModal.setData(item);
-                        $("#addQuestion").modal('show');
-                    }
-                }
-            });
-            var editModal = new Vue({
-                el: "#addQuestion",
-                delimiters: ['${', '}'],
-                data: {
-                    id: -1,
-                    type: "",
-                    language: "",
-                    title: "",
-                    question: "",
-                    score: 0,
-                    options: [],
-                    newOpt: {},
-                    errMsg: ""
-                },
-                methods: {
-                    setData: function(data) {
-                        if (data.type) {
-                            this.type = data.type.id;
-                        }
-                        this.language = data.language;
-                        this.title = data.title;
-                        this.question = data.question;
-                        this.score = data.score;
-                        this.id = data.id;
-                        this.options = data.options;
-                    },
-                    addOpt: function() {
-                        $("#add-option").removeClass('hidden');
-                    },
-                    confirmOpt: function() {
-                        if (_.isEmpty(this.newOpt.name)) {
-                            return this.errMsg = "选项的内容不能为空";
-                        }
-                        this.errMsg = "";
-                        this.options.push({
-                            name: this.newOpt.name,
-                            is_answer: this.newOpt.is_answer,
-                            question_id: this.id
-                        });
-                        this.newOpt = {};
-                    },
-                    save: function() {
-                        var data = {
-                            type: this.type,
-                            language: this.language,
-                            title: this.title,
-                            question: this.question,
-                            score: this.score,
-                            id: this.id,
-                            options: this.options
-                        };
-                        $.post("/manager/addOrUpQuestion", {data: JSON.stringify(data)}, function(resp) {
-                            console.log(resp);
-                        });
-                    }
-                }
-            });
-            app.init();
-        </script>
+        <script src="/public/js/question-edit.js"></script>
     {% endblock %}

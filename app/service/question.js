@@ -39,7 +39,7 @@ module.exports = app => {
 
         * validateAnswer(ctx, postData) {
             const createRule = {
-                language: {language: 'string', required: true},//问题的类型
+                language: {type: 'string', required: true},//问题的类型
                 answers: {
                     type: 'array',
                     itemType: 'object',
@@ -75,6 +75,31 @@ module.exports = app => {
                     });
                     return resultMap;
                 })
+        }
+
+        * valEditQuestion(postData) {
+            const isRequired = !_.isNumber(postData.id);
+            const createRule = {
+                language: {type: 'string', required: isRequired},
+                question: {type: 'string', required: isRequired},
+                title: {type: 'string', required: isRequired},
+                score: {type: 'int', required: isRequired},
+                type: {type: 'int', required: isRequired},
+                options: {
+                    type: 'array',
+                    itemType: 'object',
+                    required: isRequired,
+                    rule: {is_answer: 'int', name: 'string', question_id: 'int'}
+                }
+            };
+            console.log(postData)
+            try {
+                this.ctx.validate(createRule, postData);
+            } catch (err) {
+                console.log(err)
+                return JSON.stringify(err.errors);
+            }
+            return "";
         }
 
         * doUpOrSaveObj(conn, newData, tableName) {

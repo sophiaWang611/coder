@@ -11,4 +11,5 @@ module.exports = app => {
   app.get('/manager', 'manager.index');
   app.get('/manager/list', 'manager.list');
   app.post('/manager/addOrUpQuestion', 'manager.addOrUpQuestion');
+  app.post('/manager/delQuestion', 'manager.delQuestion');
 };
