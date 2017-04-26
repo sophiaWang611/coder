@@ -1,9 +1,5 @@
 {% extends "layout.html" %}
 
-    {% block header%}
-        <link href="/public/css/index.css" rel="stylesheet">
-    {% endblock %}
-
     {% block body %}
         <div class="form-group" id="container-questionList">
             <div class="question-item" v-for="(item, index) in questions">

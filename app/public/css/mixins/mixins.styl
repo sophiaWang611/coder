@@ -1,0 +1,234 @@
+
+
+border-color = #eeeeee
+dark-border-color = #dddddd
+background-color = #edeef1
+page-bg = #f7f7f7
+blank = #000
+ms-blank = #444444
+ms-less-blank = #777777
+ms-lesser-blank = #999999
+ms-lest-blank = #cccccc
+ms-hr-blank = #eeeeee
+ms-white = #ffffff
+ms-green = #6ec174//#21ad5a//#76b43c
+ms-dark-green = #21ad5a//#1d974e//#558528
+ms-blue = #0af
+ms-henna = #ac385c
+ms-dark-henna = #bd5865
+ms-light-henna = #dc4e65
+ms-price-green = #60a031
+ms-red = #ff6779
+ms-yellow = #ffb35a
+ms-orange = #ffaa30
+ms-bright-red = #ed2641
+ms-dark-red = #d5233d
+share-background-color = #fbfbfb
+ms-btn-blank = #362e2e
+
+ms-bg-blank = #232736
+ms-border-color = #ddd
+
+ms-size-level7 = 24px
+ms-size-level6 = 20px
+ms-size-level5 = 18px
+ms-size-level4 = 16px
+ms-size-level3 = 14px
+ms-size-level2 = 12px
+ms-size-level1 = 10px
+
+font(font-size = ms-size-level2,color = ms-blank)
+  font-size font-size
+  color color
+
+link(n_color = ms-less-blank,l_color = ms-blank)
+  text-decoration: none;
+  color n_color
+  &:active
+    color l_color
+  &:visited
+    color n_color
+tbBorder(b-color = #dcdcdc)
+  border-bottom 1px b-color solid
+  border-top 1px b-color solid
+
+/*圆 参数直径*/
+circle()
+  height arguments
+  width arguments
+  display inline-block
+  border-radius arguments
+  overflow hidden
+
+//活动文本超出显示...
+ellipsis()
+  overflow hidden
+  white-space nowrap
+  word-break keep-all
+  text-overflow ellipsis
+
+//多行文本超出显示...
+clamp()
+  overflow hidden
+  text-overflow ellipsis
+  display -webkit-box
+  -webkit-line-clamp 2
+  -webkit-box-orient vertical
+
+/*金额前较小的人民币图标*/
+priceIcon(color=#422f1f)
+  &:before
+    content "￥"
+    display inline-block
+    font 15px color
+    vertical-align baseline
+    padding-top 1px
+
+
+/*价格*/
+price(font = 24px,color = ms-green)
+  font-size font
+  color color
+  line-height 1
+  font-family arial, sans-serif
+  vertical-align baseline
+  &:before
+    content '￥'
+    margin-left -4px
+    font-family arial, sans-serif
+
+price-yuan(font = 24px,color = ms-green)
+  font-size font
+  color color
+  line-height 1
+  position relative
+  &:after
+    content '元'
+    margin-left -4px
+    font-size 12px
+    margin-left 10px
+    position absolute
+    bottom 5px
+    font-weight 700
+
+box-sizing()
+  -webkit-box-sizing arguments
+  box-sizing arguments
+
+border-radius()
+  -webkit-border-radius arguments
+  border-radius arguments
+box-shadow()
+  -webkit-box-shadow arguments
+  box-shadow arguments
+
+
+info-icon()
+  padding-left 17px
+  background url("/img/trade/info-icon.png") no-repeat left 2px
+  background-size 12px 12px
+
+transform()
+  -webkit-transform arguments
+  transform arguments
+transition()
+  -webkit-transition arguments
+  transition arguments
+animation()
+  -webkit-animation arguments
+  animation arguments
+
+//箭头
+arrow(color = #ccc,direction = right)
+  position relative
+  padding-right 20px
+  cursor pointer
+  &:after
+    content ''
+    position absolute
+    right 3px
+    top 50%
+    margin-top -5px
+    display block
+    border-color color
+    border-width 2px 2px 0 0
+    border-style solid
+    height 8px
+    width 8px
+    transition all .2s linear
+    if direction == right
+      transform rotate(45deg)
+    if direction == bottom
+      transform rotate(135deg)
+    if direction == left
+      transform rotate(225deg)
+    if direction == top
+      transform rotate(315deg)
+
+//品尝
+attention()
+  color #999999
+  font-size 12px
+  span
+    color #ffaa30
+    margin-right 2px
+  &:before
+    content ''
+    background url("/img/trade/shop-attention-icon.png") no-repeat left top
+    display inline-block
+    background-size 14px 14px
+    height 14px
+    width 16px
+    position relative
+    top 2px
+    margin-right 4px
+//收藏
+liked(color = #cccccc)
+  color color
+  font-size 12px
+  line-height 1
+  &:before
+    content ''
+    background url("/img/trade/liked-icon.png") no-repeat left top
+    background-size 12px 12px
+    height 12px
+    width 14px
+    margin-right 3px
+    display inline-block
+    position relative
+    top 1px
+//图片行
+img-row()
+  img
+    max-width 100%
+    display block
+    margin 0 auto
+
+//浮层
+mask()
+  height 100%
+  width 100%
+  position fixed
+  top 0
+  left 0
+  z-index 20
+
+//完成 图标
+icon-yes()
+  height 21px
+  width 21px
+  background url("/img/App/icon-yes.png") no-repeat left top
+  background-size 21px 21px
+//圆点 图标
+icon-yuan()
+  height 8px
+  width 8px
+  background-color #cccccc
+  border-radius 8px
+icon-info-little()
+  background url("/img/App/infor.png") no-repeat 15px 8px
+  background-size 10px 10px
+icon-info()
+  line-height 1
+  background url("/img/App/infor.png") no-repeat 15px top
+  background-size 12px 12px

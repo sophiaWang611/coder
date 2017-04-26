@@ -1,0 +1,33 @@
+@import "./mixins"
+
+btn(color,bg-color,active-color)
+  display inline-block
+  border-radius 5px
+  padding 10px
+  border 1px bg-color solid
+  background-color bg-color
+  font 14px color
+  line-height 20px
+  font-weight lighter
+  text-align center
+  cursor pointer
+  box-sizing border-box
+  width 100%
+  &:active,
+  &:hover
+    background-color active-color
+    color ms-white
+  &:visited
+    color ms-white
+  &>img
+    margin-top -2px
+  &.disable
+    background-color ms-lest-blank
+    border-color ms-lest-blank
+    pointer-events none
+    &:active,
+    &:hover
+      background-color ms-lest-blank
+      color ms-white
+    &:visited
+      color ms-white

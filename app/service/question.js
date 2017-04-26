@@ -1,22 +1,31 @@
 /**
  * Created by sophia on 17/3/29.
  */
-var _ = require("underscore");
+const _ = require("underscore");
+var CONST = require("../const");
 
 module.exports = app => {
     class Question extends app.Service {
-        * findList(language) {
+        * findList(language, showAnswer) {
+            console.log(showAnswer)
             var ctx = this.ctx, returnVal = {language: language};
             return ctx.model.Question.findAll({where: {language: language}}).then((rows)=>{
                 returnVal.questions = rows;
                 var questionIds = _.pluck(rows, "id");
                 return ctx.model.Option.findAll({where: {question_id: {$in: questionIds}}});
-            }).map((row)=>{
-                delete row.is_answer;
-                return row;
             }).then((rows)=>{
+                if (!showAnswer) {
+                    _.each(rows, (row)=>{
+                        delete row.is_answer;
+                    });
+                }
                 _.each(returnVal.questions, (v, k)=>{
-                    var options = v.dataValues.options || [], opt = _.where(rows, {question_id: v.id});
+                    if (_.isNumber(v.dataValues.type)) {
+                        const typeObj = _.findWhere(CONST.QUESTION_TYPE, {id: v.dataValues.type});
+                        typeObj && (v.dataValues.type = typeObj);
+                    }
+                    var options = v.dataValues.options || [],
+                        opt = _.where(rows, {question_id: v.id});
                     if (opt && _.isArray(opt)) {
                         options = options.concat(opt);
                     } else if (opt) {
@@ -66,10 +75,22 @@ module.exports = app => {
                     });
                     return resultMap;
                 })
-
         }
 
-
+        * doUpOrSaveObj(conn, newData, tableName) {
+            var result = false;
+            newData.updated_at = new Date();
+            if (_.isNumber(newData.id)) {
+                delete newData.created_at;
+                result = yield conn.update(tableName, newData);
+            } else {
+                newData.created_at = new Date();
+                result = yield conn.insert(tableName, newData);
+            }
+            if (!result) {
+                throw new Error("更新失败");
+            }
+        }
     }
     return Question;
 };

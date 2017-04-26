@@ -1,0 +1,20 @@
+@import "./mixins"
+
+line-title(font-size=15px,color=ms-blank,line-color=ms-lesser-blank)
+  flexbox center start
+  font font-size color
+  line-height 1
+  &:before
+    content ""
+    display block
+    flex 1
+    height 1px
+    background-color line-color
+    margin-right 15px
+  &:after
+    content ""
+    display block
+    flex 1
+    height 1px
+    background-color line-color
+    margin-left 15px

@@ -8,4 +8,7 @@ module.exports = app => {
   app.get("/user/:id", "user.index");
   app.get("/user/findOrCreate/:name", "user.findOrCreate");
 
+  app.get('/manager', 'manager.index');
+  app.get('/manager/list', 'manager.list');
+  app.post('/manager/addOrUpQuestion', 'manager.addOrUpQuestion');
 };

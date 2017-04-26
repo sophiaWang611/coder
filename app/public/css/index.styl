@@ -1,9 +1,30 @@
+@import "./mixins"
+
 .pl-20
   padding-left: 20px
+.mb-10
+  margin-bottom 10px
+.mt-5
+  margin-top: 5px
+.float-r
+  float: right;
+.body-container
+  min-height: 720px
+  background #f9f9f9
+.page-header
+  flexbox center start
+.row
+  margin-right: 0;
+  margin-left: 0;
+
+.system-add-btn
+  text-align: right;
+  margin-bottom: 15px;
+  margin-right: 15px
 
 #container-questionList
   padding: 20px
-  border: 1px solid #ccc;
+  border: 1px solid #ccc
   margin: 20px;
   .title
     font-size: 14px
@@ -42,3 +63,15 @@
     width: 40%;
     margin: 0 auto;
     display: block;
+
+#container-addQuestions, #addQuestion
+  .option-line
+    border-bottom: 1px dashed #ccc;
+    margin-bottom: 5px;
+  .glyphicon-plus-sign
+    color: #337ab7;
+  .add-btn
+    margin-left: 10px;
+    color: #337ab7;
+    cursor: pointer;
+

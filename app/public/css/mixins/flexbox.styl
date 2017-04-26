@@ -1,0 +1,55 @@
+flexbox(align = center,pack = center)
+  display -webkit-box
+  display flex
+  flex-align align
+  flex-pack pack
+  flex-line()
+
+flex()
+  box-sizing border-box
+  -webkit-box-flex arguments
+  box-flex arguments
+  flex arguments
+  display block
+
+flex-align()
+  align = arguments
+  if arguments == end || arguments == start
+    align = flex-+arguments
+  -webkit-align-items align
+  align-items align
+  -webkit-box-align arguments
+  box-align arguments
+
+flex-pack()
+  pack = arguments
+  box = arguments
+  if arguments == end || arguments == start
+    pack = flex-+arguments
+  else if arguments == space-between || arguments == space-around
+    box = justify
+  -webkit-justify-content pack;
+  justify-content pack;
+  -webkit-box-pack box
+  box-pack box
+
+flex-line()
+  -webkit-box-lines multiple
+  box-lines multiple
+  -webkit-flex-wrap wrap
+  flex-wrap wrap
+flex-one-line()
+  -webkit-box-lines single
+  box-lines single
+  -webkit-flex-wrap nowrap
+  flex-wrap nowrap
+flex-direction()
+  direction = arguments
+  if direction == row
+    direction = horizontal
+  else if direction == column
+    direction = vertical
+  -webkit-flex-direction arguments
+  flex-direction arguments
+  -webkit-box-orient direction
+  box-orient direction

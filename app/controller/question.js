@@ -9,7 +9,7 @@ module.exports = app => {
 
         * list(ctx) {
             const language = ctx.query.language || "";
-            ctx.body = yield ctx.service.question.findList(language);
+            ctx.body = yield ctx.service.question.findList(language, false);
         }
 
         * getScore(ctx) {
