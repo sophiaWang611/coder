@@ -76,6 +76,7 @@
   margin-right: 20px;
   cursor: pointer;
   float: left;
+  margin-bottom: 5px;
 }
 #container-questionList .option.active {
   background: #247ac3;
