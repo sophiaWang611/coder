@@ -24,7 +24,30 @@ module.exports = app => {
                 return ctx.body = {errCode: -1, errMsg: errMsg};
             }
 
-            ctx.body = yield ctx.service.question.getScore(ctx, postData);
+            const conn = yield app.mysql.beginTransaction();
+            try {
+                var answerIndex = 0, answerList = postData.answers;
+                while(answerIndex < answerList.length) {
+                    const answer = answerList[answerIndex];
+                    var index = 0, optionIds = answer.optionIds;
+                    while(index < optionIds.length) {
+                        yield ctx.service.answer.doSaveObj(conn, {
+                            user_id: 1,
+                            question_id: answer.questionId,
+                            option_id: optionIds[index]
+                        });
+                        index++;
+                    }
+                    answerIndex++;
+                }
+                conn.commit();
+                var score = yield ctx.service.question.getScore(ctx, postData);
+                ctx.body = _.extend(score, {success: true});
+            } catch (e) {
+                console.log(e);
+                yield conn.rollback();
+                ctx.body = {success: false, errMsg: e.message};
+            }
         }
     }
     return QuestionController;
